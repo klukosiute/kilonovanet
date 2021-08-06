@@ -1,0 +1,17 @@
+name: ksm
+channels:
+  - defaults
+dependencies:
+  # required for this project
+  - python==3.7
+  - numpy
+  - pytorch
+  # testing
+  - pytest
+  # pyphot dependencies
+  - pytables
+  - scipy
+  - astropy
+  - pip
+pip:
+  - "git+https://github.com/mfouesneau/pyphot"

@@ -8,5 +8,6 @@ setup(
     lisence="MIT",
     packages=["ksm"],
     description="Kilonova surrogate modelling via cVAE",
-    long_description=open('README.md').read(),
+    long_description=open("README.md").read(),
+    install_requires=["numpy", "pytorch"],
 )

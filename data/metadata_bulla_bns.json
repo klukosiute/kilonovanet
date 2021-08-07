@@ -1,0 +1,1 @@
+{"latent_units": 20, "hidden_units": 1000, "input_size": 5, "wavelengths_style": "bulla", "x_transforms": {"0": [0.001, 0.02], "1": [0.01, 0.13], "2": [0, 90], "3": [0, 1], "4": [0.2, 20]}, "x_transforms_exp_rules": [false, false, false, false, false], "y_transforms": [1e+38, 38.0, 38.75198048460062], "source": "https://github.com/mbulla/kilonova_models/tree/master/bns_m3_3comp"}

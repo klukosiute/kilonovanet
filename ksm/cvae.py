@@ -6,6 +6,7 @@ class CVAE(nn.Module):
     """
         Base pytorch cVAE class
     """
+
     def __init__(self, image_size=1629, hidden_dim=500, z_dim=20, c=4):
         """
         :param image_size: Size of 1D "images" of data set i.e. spectrum size
@@ -44,6 +45,7 @@ class Encoder(nn.Module):
     """
     Encoder of the cVAE
     """
+
     def __init__(self, image_size=1629, hidden_dim=500, z_dim=20, c=4):
         """
         :param image_size: Size of 1D "images" of data set i.e. spectrum size
@@ -54,16 +56,20 @@ class Encoder(nn.Module):
         """
         super().__init__()
 
-        self.layers_mu = nn.Sequential(nn.Linear(image_size + c, hidden_dim),
-                                       nn.Tanh(),
-                                       nn.Linear(hidden_dim, hidden_dim),
-                                       nn.Tanh(),
-                                       nn.Linear(hidden_dim, z_dim))
-        self.layers_logvar = nn.Sequential(nn.Linear(image_size + c, hidden_dim),
-                                           nn.Tanh(),
-                                           nn.Linear(hidden_dim, hidden_dim),
-                                           nn.Tanh(),
-                                           nn.Linear(hidden_dim, z_dim))
+        self.layers_mu = nn.Sequential(
+            nn.Linear(image_size + c, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, z_dim),
+        )
+        self.layers_logvar = nn.Sequential(
+            nn.Linear(image_size + c, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, z_dim),
+        )
 
     def forward(self, x):
         """
@@ -81,15 +87,18 @@ class Decoder(nn.Module):
     """
     Decoder of cVAE
     """
+
     def __init__(self, image_size=1629, hidden_dim=500, z_dim=20, c=4):
         super().__init__()
 
-        self.layers = nn.Sequential(nn.Linear(z_dim + c, hidden_dim),
-                                    nn.Tanh(),
-                                    nn.Linear(hidden_dim, hidden_dim),
-                                    nn.Tanh(),
-                                    nn.Linear(hidden_dim, image_size),
-                                    nn.Sigmoid())
+        self.layers = nn.Sequential(
+            nn.Linear(z_dim + c, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, image_size),
+            nn.Sigmoid(),
+        )
 
     def forward(self, z):
         """

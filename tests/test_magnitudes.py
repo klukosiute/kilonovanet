@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import pytest
 
+
 torch.manual_seed(42)
 np.random.seed(42)
 

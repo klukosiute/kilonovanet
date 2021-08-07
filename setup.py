@@ -9,5 +9,5 @@ setup(
     packages=["ksm"],
     description="Kilonova surrogate modelling via cVAE",
     long_description=open("README.md").read(),
-    install_requires=["numpy", "pytorch"],
+    install_requires=["numpy", "torch"],
 )

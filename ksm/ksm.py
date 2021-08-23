@@ -53,7 +53,7 @@ class Model:
         self.x_transforms = {int(k): v for k, v in metadata["x_transforms"].items()}
         self.x_transform_rules = metadata["x_transforms_exp_rules"]
         self.y_transforms = metadata["y_transforms"]
-        self.num_samples = 10
+        self.num_samples = 1
 
         self.nn_model = CVAE(
             self.spectrum_size, self.hidden_units, self.latent_units, self.input_size
@@ -100,21 +100,13 @@ class Model:
         )
         nn_input = self.physical_inputs_to_nn(all_data_input)
         with torch.no_grad():
-            reconstructions = torch.empty(
-                (len(nn_input), self.spectrum_size, self.num_samples)
-            ).to(torch.float)
-            for i in range(self.num_samples):
-                z = torch.randn(1, self.latent_units)
-                Z = z.repeat((len(nn_input), 1)).to(torch.float)
-                decoder_input = torch.cat(
-                    (Z, torch.from_numpy(nn_input).to(torch.float)), dim=1
+            z = torch.zeros((1, self.latent_units)).repeat((len(nn_input), 1)).to(torch.float)
+            decoder_input = torch.cat(
+                    (z, torch.from_numpy(nn_input).to(torch.float)), dim=1
                 )
-                reconstruction = self.nn_model.decoder(decoder_input)
-                reconstructions[:, :, i] = reconstruction
-        reconstructions_np = reconstructions.cpu().detach().numpy()
-        spectra_nn = self.spectra_to_real_units(
-            np.mean(reconstructions_np, 2, dtype="double")
-        )
+            reconstructions = self.nn_model.decoder(decoder_input)
+        reconstructions_np = reconstructions.double().cpu().detach().numpy()
+        spectra_nn = self.spectra_to_real_units(reconstructions_np)
         return spectra_nn, unique_times
 
     def predict_magnitudes(

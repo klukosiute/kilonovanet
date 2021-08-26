@@ -203,7 +203,7 @@ class Model:
         that dynesty would evaluate over and over again so.
 
         Also this function accounts for the upper limit measurements (as instructed by Z.Doctor)
-        :param physical_parameters:
+        :param physical_params:
         :return: Gaussian log likelihood (plus 1 for the "modelling uncertainty" ala Coughlin and co.)
         """
         magnitude_predictions = self.predict_magnitudes(
@@ -217,7 +217,7 @@ class Model:
                 return -np.inf
         loglklhd = -0.5 * np.sum(
             (magnitude_predictions - self.observations.data_magnitudes) ** 2
-            / (self.observations.magnitude_errors + 1) ** 2
+            / (self.observations.magnitude_errors ** 2 + 1)
         )
         return loglklhd
 
@@ -270,6 +270,6 @@ class Model:
                 return -np.inf
         loglklhd = -0.5 * np.sum(
             (magnitude_predictions - self.observations.data_magnitudes) ** 2
-            / (self.observations.magnitude_errors + 1) ** 2
+            / (self.observations.magnitude_errors ** 2 + 1)
         )
         return loglklhd

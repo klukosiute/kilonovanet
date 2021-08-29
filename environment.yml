@@ -8,6 +8,7 @@ dependencies:
   - pytorch
   # testing
   - pytest
+  - pandas
   # pyphot dependencies
   - pytables
   - scipy

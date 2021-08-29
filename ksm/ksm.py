@@ -100,10 +100,14 @@ class Model:
         )
         nn_input = self.physical_inputs_to_nn(all_data_input)
         with torch.no_grad():
-            z = torch.zeros((1, self.latent_units)).repeat((len(nn_input), 1)).to(torch.float)
+            z = (
+                torch.zeros((1, self.latent_units))
+                .repeat((len(nn_input), 1))
+                .to(torch.float)
+            )
             decoder_input = torch.cat(
-                    (z, torch.from_numpy(nn_input).to(torch.float)), dim=1
-                )
+                (z, torch.from_numpy(nn_input).to(torch.float)), dim=1
+            )
             reconstructions = self.nn_model.decoder(decoder_input)
         reconstructions_np = reconstructions.double().cpu().detach().numpy()
         spectra_nn = self.spectra_to_real_units(reconstructions_np)
@@ -230,9 +234,33 @@ class Model:
         non_uniform = []
         for i, param in enumerate(uniform_params):
             non_uniform.append(
-                param * (self.x_transforms[i][0] - self.x_transforms[i][1])
-                + self.x_transforms[i][1]
+                param * (self.x_transforms[i][1] - self.x_transforms[i][0])
+                + self.x_transforms[i][0]
             )
+        return non_uniform
+
+    def prior_transform_kasen_dynesty(self, uniform_params):
+        """
+        A dynesty thing.
+        :param uniform_params:
+        :return:
+        """
+        non_uniform = []
+        for i, param in enumerate(uniform_params):
+            if self.x_transform_rules[i]:  # yes power 10
+                non_uniform.append(
+                    np.power(
+                        10,
+                        param * (self.x_transforms[i][1] - self.x_transforms[i][0])
+                        + self.x_transforms[i][0],
+                    )
+                )
+            if not self.x_transform_rules[i]:
+                non_uniform.append(
+                    param * (self.x_transforms[i][1] - self.x_transforms[i][0])
+                    + self.x_transforms[i][0]
+                )
+
         return non_uniform
 
     def log_prior_emcee(self, physical_params):

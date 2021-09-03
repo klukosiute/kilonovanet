@@ -54,6 +54,7 @@ class Model:
         self.x_transform_rules = metadata["x_transforms_exp_rules"]
         self.y_transforms = metadata["y_transforms"]
         self.num_samples = 1
+        self.model_type = metadata["wavelengths_style"]
 
         self.nn_model = CVAE(
             self.spectrum_size, self.hidden_units, self.latent_units, self.input_size
@@ -185,9 +186,14 @@ class Model:
                     self.x_transforms[i][1] - self.x_transforms[i][0]
                 )
             if rule:
-                param_matrix_new[i] = (
-                    np.log10(param_matrix.T[i]) - self.x_transforms[i][0]
-                ) / (self.x_transforms[i][1] - self.x_transforms[i][0])
+                if i == 2 and self.model_type == "kasen":
+                    param_matrix_new[i] = (
+                        -1 * np.log10(param_matrix.T[i]) - self.x_transforms[i][0]
+                    ) / (self.x_transforms[i][1] - self.x_transforms[i][0])
+                else:
+                    param_matrix_new[i] = (
+                        np.log10(param_matrix.T[i]) - self.x_transforms[i][0]
+                    ) / (self.x_transforms[i][1] - self.x_transforms[i][0])
 
         return param_matrix_new.T
 
@@ -245,23 +251,34 @@ class Model:
         :param uniform_params:
         :return:
         """
-        non_uniform = []
-        for i, param in enumerate(uniform_params):
-            if self.x_transform_rules[i]:  # yes power 10
-                non_uniform.append(
-                    np.power(
-                        10,
-                        param * (self.x_transforms[i][1] - self.x_transforms[i][0])
-                        + self.x_transforms[i][0],
-                    )
-                )
-            if not self.x_transform_rules[i]:
-                non_uniform.append(
-                    param * (self.x_transforms[i][1] - self.x_transforms[i][0])
-                    + self.x_transforms[i][0]
-                )
+        # oh god i hope this is right
+        priors = [
+            2 * uniform_params[0] - 3.0,
+            0.27 * uniform_params[1] + 0.03,
+            8 * uniform_params[2] - 9,
+        ]
+        return_vals = [np.power(10, priors[0]), priors[1], np.power(10, priors[2])]
+        return return_vals
 
-        return non_uniform
+    def prior_transform_dietrich_dynesty(self, uniform_params):
+        """
+        A dynesty thing.
+        :param uniform_params:
+        :return:
+        """
+        priors = [
+            (np.log10(0.02) - np.log10(0.001)) * uniform_params[0] + np.log10(0.001),
+            (np.log10(0.13) - np.log10(0.01)) * uniform_params[1] + np.log10(0.01),
+            uniform_params[2],
+            uniform_params[3],
+        ]
+        return_vals = [
+            np.power(10, priors[0]),
+            np.power(10, priors[1]),
+            np.rad2deg(np.arccos(priors[2])),
+            priors[3],
+        ]
+        return return_vals
 
     def log_prior_emcee(self, physical_params):
         """

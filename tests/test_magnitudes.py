@@ -30,7 +30,7 @@ MODELS = [
 PHYSPARAMS = [
     np.array([1.0e-2, 9.0e-2, 3.0e1, 3.0e-1]),
     np.array([0.05, 0.01, 0.3]),
-    np.array([2.50e-3, 3.0e-2, 1.0e1]),
+    np.array([2.50e-3, 3.0e-2, 1.0e-1]),
 ]
 
 TIMES = [

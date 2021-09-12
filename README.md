@@ -1,4 +1,7 @@
-# KSM: Kilonova Surrogate Modelling
+# KilonovaNet: Kilonova Surrogate Modelling
+
+This branch provides a slew of likelihood functions that I used in my own work for
+both the M. Bulla BNS and D.Kasen BNS models.
 
 A conditional variational autoencoder (cVAE) framework for producing continuous
 surrogate spectra for kilonova models.
@@ -26,7 +29,7 @@ In order to produce surrogate spectra (see *eventual paper* for discussion about
 how good these spectra are or are not, though), use:
 
 ```python
-import ksm
+import kilonovanet
 import numpy as np
 
 metadata_file = "data/metadata_bulla_bns.json"
@@ -34,7 +37,7 @@ torch_file = "models/bulla-bns-latent-20-hidden-1000-CV-4-2021-04-21-epoch-200.p
 times = np.array([1.2, 2.2])
 physical_parameters = np.array([1.0e-2, 9.0e-2, 3.0e1, 3.0e-1])
 
-model = ksm.Model(metadata_file, torch_file)
+model = kilonovanet.Model(metadata_file, torch_file)
 spectra = model.predict_spectra(physical_parameters, times)
 ```
 
@@ -47,7 +50,7 @@ In order to produce some photometric observations, the following have to be spec
 The general use is then as follows:
 
 ```python
-import ksm
+import kilonovanet
 import numpy as np
  
 metadata_file = "data/metadata_bulla_bns.json"
@@ -59,7 +62,7 @@ filters = np.array(["LSST_u", "LSST_z", "LSST_y", "LSST_u", "LSST_z", "LSST_y"])
 distance = 40.0 * 10 ** 6 * 3.086e18 # 40 Mpc in cm
 physical_parameters = np.array([1.0e-2, 9.0e-2, 3.0e1, 3.0e-1])
 
-model = ksm.Model(metadata_file, torch_file, filter_library_path=filter_lib)
+model = kilonovanet.Model(metadata_file, torch_file, filter_library_path=filter_lib)
 mags = model.predict_magnitudes(physical_parameters, times=times, filters=filters,
 distance=distance)
 ```
@@ -72,10 +75,3 @@ then simply call `model.predict_magnitudes(physical_parameters)`.
 - All specified model parameter values have to lie within the ranges of the original
 radiative transport simulations! This code will not throw errors if you do not do this
 but will instead return nonsense results, so be mindful to read their papers.
-- The Kasen model is specified with three parameters: mass (solar masses), velocity 
-(as a fraction of c), and lanthanide fraction (which ranges from 1e-9 to 1e-1). 
-The first two parameters are specified as usual with the allowed ranges from the kilonova
-model grid. The lanthanide fraction though needs to be specified as the positive exponent.
-For example, if I want to specify a mass of 0.001 solar masses, a velocity of 0.1c, and a
-lanthanide fraction of 1e-4, the input parameters have to read `np.array([0.001, 0.1, 1e4)]`.
-Sorry, I'll fix it eventually.

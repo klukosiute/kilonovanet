@@ -1,4 +1,4 @@
-import ksm
+import kilonovanet
 import numpy as np
 import torch
 import pandas as pd
@@ -36,13 +36,13 @@ def import_data():
         bands.append(band_rules_dict[band] + band)
     bands = np.array(bands)
 
-    observations = ksm.Observations(times, bands, mags, err, 1.23e26)
+    observations = kilonovanet.Observations(times, bands, mags, err, 1.23e26)
     return observations
 
 
 def create_model():
     observations = import_data()
-    model = ksm.Model(
+    model = kilonovanet.Model(
         "data/metadata_bulla_bns.json",
         "models/bulla-bns-latent-20-hidden-1000-CV-4-2021-04-21-epoch-200.pt",
         filter_library_path=FILTER_LIB,

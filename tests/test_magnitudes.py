@@ -1,4 +1,4 @@
-import ksm
+import kilonovanet
 import numpy as np
 import torch
 import pytest
@@ -66,7 +66,7 @@ INPUTS2 = [
 )
 def test_correct_output_no_obs(metadata, torch_file, params, times, output, tolerance):
     # Test that the output is correct when no Observations object provided
-    model = ksm.Model(metadata, torch_file, filter_library_path=FILTER_LIB)
+    model = kilonovanet.Model(metadata, torch_file, filter_library_path=FILTER_LIB)
     mags = model.predict_magnitudes(
         params, times=times, distance=DISTANCE, filters=FILTERS,
     )
@@ -76,15 +76,15 @@ def test_correct_output_no_obs(metadata, torch_file, params, times, output, tole
 @pytest.mark.parametrize("metadata, torch_file, params, times", INPUTS2)
 def test_matching_outputs(metadata, torch_file, params, times):
     # Test that the no-Obs and Obs ways of producing output does the same thing
-    obs = ksm.Observations(
+    obs = kilonovanet.Observations(
         times, FILTERS, np.array([0.0, 0.0, 0]), np.array([0.0, 0.0, 0]), DISTANCE,
     )
-    model1 = ksm.Model(metadata, torch_file, filter_library_path=FILTER_LIB)
+    model1 = kilonovanet.Model(metadata, torch_file, filter_library_path=FILTER_LIB)
     mags1 = model1.predict_magnitudes(
         params, times=times, distance=DISTANCE, filters=FILTERS,
     )
 
-    model2 = ksm.Model(
+    model2 = kilonovanet.Model(
         metadata, torch_file, filter_library_path=FILTER_LIB, observations=obs
     )
     mags2 = model2.predict_magnitudes(params)

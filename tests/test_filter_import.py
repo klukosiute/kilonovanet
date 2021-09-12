@@ -1,4 +1,4 @@
-import ksm
+import kilonovanet
 import pytest
 
 
@@ -23,8 +23,8 @@ MODELS = [
 )
 def test_filter_imports(metadata, torch_file):
     # Here testing that not loading the filters is fine and that prediction in spectra-only mode works too
-    model = ksm.Model(metadata, torch_file, filter_library_path=FILTER_LIB)
+    model = kilonovanet.Model(metadata, torch_file, filter_library_path=FILTER_LIB)
     assert model.filters_loaded
 
-    model2 = ksm.Model(metadata, torch_file)
+    model2 = kilonovanet.Model(metadata, torch_file)
     assert not model2.filters_loaded

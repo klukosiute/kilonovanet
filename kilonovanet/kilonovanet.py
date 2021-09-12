@@ -3,7 +3,7 @@ import os
 from pyphot import unit, Filter
 import torch
 
-from ksm.cvae import CVAE
+from kilonovanet.cvae import CVAE
 import numpy as np
 
 
@@ -26,7 +26,7 @@ class Model:
         :type filter_library_path: str, optional
         :param observations: an Observations object that will always be used, otherwise times, filters, etc.
         must be specified anew each time Model.predict_magnitudes() is called
-        :type observations: class `ksm.observations.Observations`, optional
+        :type observations: class `kilonovanet.observations.Observations`, optional
         """
         with open(metadata_file_path) as json_file:
             metadata = json.load(json_file)

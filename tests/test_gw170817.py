@@ -77,23 +77,3 @@ def test_import_data():
         == np.array([0.02, 0.04, 0.03, 0.03, 0.01, 0.03, 0.15, 0.11, 0.06, 0.06])
     )
     assert not np.all(observations.upper_limit[:10])
-
-
-def test_mag_upper_limits():
-    # this should at minimum make observation index 41 be affected
-
-    model = create_model()
-    params = np.array([0.02, 0.13, 10, 0.5])
-    lklhd = model.compute_likelihood_dynesty(params)
-    assert not np.isfinite(lklhd)
-
-
-def test_prior():
-    model = create_model()
-    params_min = np.array([0.001, 0.01, 0, 0])
-    params_max = np.array([0.02, 0.13, 90, 1])
-    prior_min = model.prior_transform_dynesty(np.array([0, 0, 0.0, 0.0]))
-    prior_max = model.prior_transform_dynesty(np.array([1, 1, 1.0, 1.0]))
-
-    np.testing.assert_allclose(prior_min, params_min)
-    np.testing.assert_allclose(prior_max, params_max)

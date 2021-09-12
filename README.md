@@ -28,7 +28,7 @@ In order to produce surrogate spectra (see *eventual paper* for discussion about
 how good these spectra are or are not, though), use:
 
 ```python
-import ksm
+import kilonovanet
 import numpy as np
 
 metadata_file = "data/metadata_bulla_bns.json"
@@ -36,7 +36,7 @@ torch_file = "models/bulla-bns-latent-20-hidden-1000-CV-4-2021-04-21-epoch-200.p
 times = np.array([1.2, 2.2])
 physical_parameters = np.array([1.0e-2, 9.0e-2, 3.0e1, 3.0e-1])
 
-model = ksm.Model(metadata_file, torch_file)
+model = kilonovanet.Model(metadata_file, torch_file)
 spectra = model.predict_spectra(physical_parameters, times)
 ```
 
@@ -49,7 +49,7 @@ In order to produce some photometric observations, the following have to be spec
 The general use is then as follows:
 
 ```python
-import ksm
+import kilonovanet
 import numpy as np
  
 metadata_file = "data/metadata_bulla_bns.json"
@@ -61,7 +61,7 @@ filters = np.array(["LSST_u", "LSST_z", "LSST_y", "LSST_u", "LSST_z", "LSST_y"])
 distance = 40.0 * 10 ** 6 * 3.086e18 # 40 Mpc in cm
 physical_parameters = np.array([1.0e-2, 9.0e-2, 3.0e1, 3.0e-1])
 
-model = ksm.Model(metadata_file, torch_file, filter_library_path=filter_lib)
+model = kilonovanet.Model(metadata_file, torch_file, filter_library_path=filter_lib)
 mags = model.predict_magnitudes(physical_parameters, times=times, filters=filters,
 distance=distance)
 ```

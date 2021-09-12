@@ -1,4 +1,4 @@
-# KSM: Kilonova Surrogate Modelling
+# KilonovaNet: Kilonova Surrogate Modelling
 
 A conditional variational autoencoder (cVAE) framework for producing continuous
 surrogate spectra for kilonova models.
@@ -18,8 +18,10 @@ those but you will need to install [pyphot](https://github.com/mfouesneau/pyphot
 using this work.
 
 ## Installation
-Right now, this can be installed locally from source. In the near future, I will
-package it properly. Conda environment is provided.
+Right now, this can be installed locally from source
+(download and run `python setup.py install`).
+In the near future, I will package it properly. 
+Conda environment is provided, which should be set up before installation.
 
 ## Usage
 In order to produce surrogate spectra (see *eventual paper* for discussion about
@@ -72,10 +74,3 @@ then simply call `model.predict_magnitudes(physical_parameters)`.
 - All specified model parameter values have to lie within the ranges of the original
 radiative transport simulations! This code will not throw errors if you do not do this
 but will instead return nonsense results, so be mindful to read their papers.
-- The Kasen model is specified with three parameters: mass (solar masses), velocity 
-(as a fraction of c), and lanthanide fraction (which ranges from 1e-9 to 1e-1). 
-The first two parameters are specified as usual with the allowed ranges from the kilonova
-model grid. The lanthanide fraction though needs to be specified as the positive exponent.
-For example, if I want to specify a mass of 0.001 solar masses, a velocity of 0.1c, and a
-lanthanide fraction of 1e-4, the input parameters have to read `np.array([0.001, 0.1, 1e4)]`.
-Sorry, I'll fix it eventually.

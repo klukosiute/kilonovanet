@@ -18,11 +18,9 @@ those but you will need to install [pyphot](https://github.com/mfouesneau/pyphot
 using this work.
 
 ## Installation
-Right now, this can be installed locally from source
-(download and run `python setup.py install`).
-In the near future, I will package it properly. 
-Conda environment is provided, which should be set up before installation.
+Install from source: download and run `python setup.py install`.
 
+Install via pip: `pip install kilonovanet`
 ## Usage
 In order to produce surrogate spectra (see *eventual paper* for discussion about
 how good these spectra are or are not, though), use:

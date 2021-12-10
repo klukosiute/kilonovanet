@@ -91,6 +91,23 @@ class Model:
 
     def predict_spectra(self, physical_parameters, times):
         unique_times = np.unique(times)
+
+        # check that the parameters are all in the ranges specified by simulation authors (we do NOT extrapolate)
+
+        message = "One of your input parameters is outside of the published range of the simulation. Please check the original papers to learn what the simulated ranges of input parameters were and therefore what is allowed input for the kilonovanet surrogate models."
+        for i, param in enumerate(physical_parameters):
+            if not self.x_transform_rules[i]:
+                assert param <= self.x_transforms[i][1] and param >= self.x_transforms[i][0], message
+            else:
+                if self.model_type == 'kasen':
+                    if i == '2':
+                        assert np.log10(param) <= -1*self.x_transforms[i][1] and np.log10(param) >= -1*self.x_transforms[i][0], message
+                else:
+                    assert np.log10(param) <= self.x_transforms[i][1] and np.log10(param) >= self.x_transforms[i][0], message
+
+            
+
+
         all_data_input = np.hstack(
             (
                 np.repeat(

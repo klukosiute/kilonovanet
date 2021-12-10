@@ -1,4 +1,10 @@
+from os import path
 from setuptools import setup, find_packages
+
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
+    long_description = f.read()
+
 
 setup(
     name="kilonovanet",
@@ -15,7 +21,8 @@ setup(
       'Topic :: Scientific/Engineering :: Astronomy'
       ],
     description="Kilonova surrogate modelling via cVAE",
-    long_description=open("README.md").read(),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     install_requires=["numpy", "torch", "pyphot"],
     python_requires='>=3.6'
 )

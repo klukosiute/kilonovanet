@@ -11,20 +11,21 @@ trained and provided models are:
 - [M. Bulla BHNS Models](https://github.com/mbulla/kilonova_models/tree/master/bhns_m1_2comp)
 - [D.Kasen BNS Models](https://github.com/dnkasen/Kasen_Kilonova_Models_2017)
 
-This work requires the use of [pyphot](https://github.com/mfouesneau/pyphot) and
-therefore there are a number of dependencies that are needed to just get pyphot working,
-i.e. astropy, pytables, etc. My `environment.yml` for conda environments should handle
-those but you will need to install [pyphot](https://github.com/mfouesneau/pyphot) before
-using this work.
+This work requires the use of [pyphot](https://github.com/mfouesneau/pyphot); pyphot requires hdf5. 
+See their installation intructions to see how to install that for your system. Then, if you install 
+KilonovaNet via pip, dependencies (including pyphot) should install properly. 
 
 ## Installation
-Install from source: download and run `python setup.py install`.
+Install via pip: 
 
-Install via pip: `pip install kilonovanet`
+`pip install kilonovanet`
+
 ## Usage
-In order to produce surrogate spectra (see *eventual paper* for discussion about
-how good these spectra are or are not, though), use:
+In order to produce surrogate spectra, you will need to specify the model and torch files. 
+*These are not included in this package, you must download them separately from 
+[the KilonovaNet github](https://github.com/klukosiute/kilonovanet) from data and model folders.*
 
+After you have the files in your system, you can produce spectra with the following:
 ```python
 import kilonovanet
 import numpy as np
@@ -44,7 +45,9 @@ In order to produce some photometric observations, the following have to be spec
 - the times post-merger to produce the observations
 - the filters in which to produce the observations
 
-The general use is then as follows:
+I have specified some filters in the github folder filter_data, but any filter transmission curves should work properly.
+
+After you have filter profiles, use the following to produce synthetic photometric observations:
 
 ```python
 import kilonovanet
@@ -71,4 +74,4 @@ then simply call `model.predict_magnitudes(physical_parameters)`.
 ### Warnings
 - All specified model parameter values have to lie within the ranges of the original
 radiative transport simulations! This code will not throw errors if you do not do this
-but will instead return nonsense results, so be mindful to read their papers.
+but will instead return nonsense results, so be mindful to read their papers to find the correct ranges.

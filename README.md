@@ -71,7 +71,3 @@ If you intend to use the same set of observations often, e.g. when doing an
 MCMC-based fit, you can specify all of them in an `Observations` object and
 then simply call `model.predict_magnitudes(physical_parameters)`. 
 
-### Warnings
-- All specified model parameter values have to lie within the ranges of the original
-radiative transport simulations! This code will not throw errors if you do not do this
-but will instead return nonsense results, so be mindful to read their papers to find the correct ranges.
